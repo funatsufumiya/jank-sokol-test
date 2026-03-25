@@ -104,8 +104,8 @@ int my_main() {
     pass_action.swapchain.height = fb_h;
     glViewport(0, 0, fb_w, fb_h);
 
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Iniciar o render pass
     sg_begin_pass(pass_action);
