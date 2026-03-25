@@ -100,6 +100,8 @@ int my_main() {
 
     int fb_w = 0, fb_h = 0;
     glfwGetFramebufferSize(win, &fb_w, &fb_h);
+    std::cout << \"w: \" << fb_w
+              << \", h: \" << fb_h << std::endl;
     pass_action.swapchain.width = fb_w;
     pass_action.swapchain.height = fb_h;
     glViewport(0, 0, fb_w, fb_h);
