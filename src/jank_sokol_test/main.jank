@@ -37,6 +37,12 @@ int my_main() {
   glfwMakeContextCurrent(win);
   std::cout << \"GLFW window initialized successful\" << std::endl;
 
+  #ifdef __APPLE__
+  unsigned int vao;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+  #endif
+
   std::cout << \"Initializng the sokol..\" << std::endl;
 
   sg_desc desc = {0};
@@ -91,11 +97,15 @@ int my_main() {
   sg_pass pass_action = {0};
 
   while (!glfwWindowShouldClose(win)) {
+
     int fb_w = 0, fb_h = 0;
     glfwGetFramebufferSize(win, &fb_w, &fb_h);
     pass_action.swapchain.width = fb_w;
     pass_action.swapchain.height = fb_h;
     glViewport(0, 0, fb_w, fb_h);
+
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Iniciar o render pass
     sg_begin_pass(pass_action);
