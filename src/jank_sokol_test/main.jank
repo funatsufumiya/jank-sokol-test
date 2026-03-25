@@ -45,6 +45,19 @@ int my_main() {
     std::cerr << \"Failed to initialize sokol_gfx\\n\";
     return -1;
   }
+  
+    /* Log which sokol backend is in use */
+    const char* sokol_backend_name = \"Unknown\";
+    switch (sg_query_backend()) {
+      case SG_BACKEND_D3D11: sokol_backend_name = \"D3D11\"; break;
+      case SG_BACKEND_GLES3: sokol_backend_name = \"OpenGL ES 3\"; break;
+      case SG_BACKEND_GLCORE: sokol_backend_name = \"OpenGL Core\"; break;
+      case SG_BACKEND_METAL_MACOS: sokol_backend_name = \"Metal (macOS)\"; break;
+      case SG_BACKEND_METAL_IOS: sokol_backend_name = \"Metal (iOS)\"; break;
+      case SG_BACKEND_DUMMY: sokol_backend_name = \"Dummy\"; break;
+      default: sokol_backend_name = \"Unknown/Other\"; break;
+    }
+    std::cout << \"sokol backend: \" << sokol_backend_name << std::endl;
 
   const float vertices[] = {// positions            // colors
                             0.0f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
