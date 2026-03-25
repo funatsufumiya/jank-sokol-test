@@ -4,46 +4,22 @@
 #include <algorithm>
 #include <ostream>
 #define SOKOL_IMPL
+#define SOKOL_NO_ENTRY
 #define SOKOL_GLCORE
-/**/
 #include <sokol_gfx.h>
-/*#include <sokol_log.h>*/
-#include <glfw3.h>
-#include <gl.h>
+#include <sokol_log.h>
+#include <sokol_app.h>
+#include <sokol_glue.h>
+
 #include <iostream>
 
 #include <basic.glsl.h>
 
-int my_main() {
-  std::cout << \"Initializing window...\" << std::endl;
+sg_bindings bind = {};
+sg_pipeline pip;
+sg_pass pass_action = {0};
 
-  if (!glfwInit()) {
-    std::cout << \"Failed to initialize GLFW\" << std::endl;
-    return -1;
-  }
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  GLFWwindow *win = glfwCreateWindow(800, 600, \"jank sokol test\", NULL, NULL);
-
-  if (win == NULL) {
-    std::cout << \"Failed to create GLFW window\" << std::endl;
-    glfwTerminate();
-    return -1;
-  }
-
-  glfwMakeContextCurrent(win);
-  std::cout << \"GLFW window initialized successful\" << std::endl;
-
-  #ifdef __APPLE__
-  unsigned int vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-  #endif
-
+void init() {
   std::cout << \"Initializng the sokol..\" << std::endl;
 
   sg_desc desc = {0};
@@ -51,7 +27,7 @@ int my_main() {
 
   if (!sg_isvalid()) {
     std::cerr << \"Failed to initialize sokol_gfx\\n\";
-    return -1;
+    return;
   }
   
     /* Log which sokol backend is in use */
@@ -86,7 +62,7 @@ int my_main() {
   pipeline_desc.layout.attrs[0].format = SG_VERTEXFORMAT_FLOAT3;
   pipeline_desc.layout.attrs[1].format = SG_VERTEXFORMAT_FLOAT4;
 
-  sg_pipeline pip = sg_make_pipeline(&pipeline_desc);
+  pip = sg_make_pipeline(&pipeline_desc);
 
   std::cout << \"pipeline initialized!\" << std::endl;
 
@@ -95,41 +71,55 @@ int my_main() {
 
   std::cout << \"bind initialized!\" << std::endl;
 
-  sg_pass pass_action = {0};
-
-  while (!glfwWindowShouldClose(win)) {
-
-    int fb_w = 0, fb_h = 0;
-    glfwGetFramebufferSize(win, &fb_w, &fb_h);
-    // std::cout << \"w: \" << fb_w
-    //           << \", h: \" << fb_h << std::endl;
-    pass_action.swapchain.width = fb_w;
-    pass_action.swapchain.height = fb_h;
-    glViewport(0, 0, fb_w, fb_h);
-
-    // glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Iniciar o render pass
-    sg_begin_pass(pass_action);
-
-    sg_apply_pipeline(pip);
-    sg_apply_bindings(&bind);
-    sg_draw(0, 3, 1);
-
-    // Finalizar o render pass
-    sg_end_pass();
-    sg_commit();
-
-    glfwSwapBuffers(win);
-    glfwPollEvents();
-  }
-
-  sg_shutdown();
-  glfwTerminate();
-  return 0;
+  pass_action = {0};
 }
+
+void frame() {
+  //std::cout << \"frame\" << std::endl;
+
+  const sg_pass_action _sg_pass_action = {
+      .colors[0] = {
+          .load_action = SG_LOADACTION_CLEAR,
+          .clear_value = { 0.0f, 0.2f, 0.0f, 1.0f }
+      }
+  };
+
+  const sg_pass _sg_pass = {
+    .action = _sg_pass_action,
+    .swapchain = sglue_swapchain()
+  };
+
+  //sg_begin_pass(pass_action);
+  sg_begin_pass(&_sg_pass);
+
+  sg_apply_pipeline(pip);
+  sg_apply_bindings(&bind);
+  sg_draw(0, 3, 1);
+
+  // Finalizar o render pass
+  sg_end_pass();
+  sg_commit();
+}
+
+void cleanup() {
+  sg_shutdown();
+}
+
+void srun(){
+    sapp_run((sapp_desc) {
+        .width = 800,
+        .height = 680,
+        .init_cb = init,
+        .frame_cb = frame,
+        .cleanup_cb = cleanup,
+        .logger = { .func = slog_func },
+    });
+}
+
 ")
 
 (defn -main [& args]
-  (cpp/my_main))
+  ;(cpp/my_main)
+  ;(cpp/sapp_run)
+  (cpp/srun)
+  )
