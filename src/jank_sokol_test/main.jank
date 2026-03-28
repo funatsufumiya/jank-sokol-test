@@ -37,7 +37,7 @@ void init() {
     return;
   }
   
-    /* Log which sokol backend is in use */
+/*
     const char* sokol_backend_name = \"Unknown\";
     switch (sg_query_backend()) {
       case SG_BACKEND_D3D11: sokol_backend_name = \"D3D11\"; break;
@@ -49,6 +49,8 @@ void init() {
       default: sokol_backend_name = \"Unknown/Other\"; break;
     }
     std::cout << \"sokol backend: \" << sokol_backend_name << std::endl;
+  
+*/
 
   const float vertices[] = {// positions            // colors
                             0.0f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
