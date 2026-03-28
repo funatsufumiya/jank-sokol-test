@@ -8,11 +8,14 @@
 #define SOKOL_GLCORE
 #include <sokol_gfx.h>
 #include <sokol_log.h>
-#include <sokol_app.h>
-#include <sokol_glue.h>
 
 extern \"C\" {
-void run_app(sapp_desc* desc);
+void run_app(
+    int width, int height,
+    void (*init_cb)(void),
+    void (*frame_cb)(void),
+    void (*cleanup_cb)(void)
+);
 }
 
 #include <iostream>
@@ -88,13 +91,13 @@ void frame() {
       }
   };
 
-  const sg_pass _sg_pass = {
-    .action = _sg_pass_action,
-    .swapchain = sglue_swapchain()
-  };
+  // const sg_pass _sg_pass = {
+  //   .action = _sg_pass_action,
+  //  .swapchain = sglue_swapchain()
+  // };
 
-  //sg_begin_pass(pass_action);
-  sg_begin_pass(&_sg_pass);
+  sg_begin_pass(pass_action);
+  //sg_begin_pass(&_sg_pass);
 
   sg_apply_pipeline(pip);
   sg_apply_bindings(&bind);
@@ -110,16 +113,7 @@ void cleanup() {
 }
 
 void srun(){
-    sapp_desc desc = {
-        .width = 800,
-        .height = 680,
-        .init_cb = init,
-        .frame_cb = frame,
-        .cleanup_cb = cleanup,
-        .logger = { .func = slog_func },
-    };
-  
-  run_app(&desc);
+  run_app(800, 600, init, frame, cleanup);
 }
 
 ")
