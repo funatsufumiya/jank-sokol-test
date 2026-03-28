@@ -22,7 +22,7 @@ If needed for dev. Already included.
 
 ```bash
 # win
-$ clang -shared -o lib/libsokol.dll cpp_src/sokol_dll.c -Iinclude
+$ clang -shared -o lib/libsokol.dll cpp_src/sokol_dll.c -Iinclude -ldxgi -ld3d12
 
 # linux
 $ clang -shared -o lib/libsokol.so cpp_src/sokol_dll.c -Iinclude -fPIC -lXi -lX11 -lGL -lXcursor
