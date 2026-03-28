@@ -11,6 +11,10 @@
 #include <sokol_app.h>
 #include <sokol_glue.h>
 
+extern \"C\" {
+void run_app(sapp_desc* desc);
+}
+
 #include <iostream>
 
 #include <basic.glsl.h>
@@ -106,14 +110,16 @@ void cleanup() {
 }
 
 void srun(){
-    sapp_run((sapp_desc) {
+    sapp_desc desc = {
         .width = 800,
         .height = 680,
         .init_cb = init,
         .frame_cb = frame,
         .cleanup_cb = cleanup,
         .logger = { .func = slog_func },
-    });
+    };
+  
+  run_app(&desc);
 }
 
 ")

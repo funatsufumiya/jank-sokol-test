@@ -9,6 +9,7 @@ Tested on Win/Mac/Linux (windows ver is checked using [jank-win](https://github.
 ## Run
 
 ```bash
+$ clang++ -shared -o lib/libapp.dll cpp_src/app.cpp -Iinclude -std=c++20
 $ lein run
 ```
 
