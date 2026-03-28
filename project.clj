@@ -7,7 +7,7 @@
   :main jank-sokol-test.main
   :jank {:include-dirs ["include"]
          :library-dirs ["lib"]
-         :linked-libraries ["app", "glew"]}
+         :linked-libraries ["sokol", "glew"]}
   :profiles {:base {:jank {:output-dir "target/debug"
                            :optimization-level 0}}
              :release {:jank {:output-dir "target/release"

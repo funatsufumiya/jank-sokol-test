@@ -11,21 +11,25 @@ Tested on Win/Mac/Linux (windows ver is checked using [jank-win](https://github.
 ## Run
 
 ```bash
-# win
-$ clang++ -shared -o lib/libapp.dll cpp_src/app.cpp -Iinclude -std=c++20
-
-# linux
-$ clang++ -shared -o lib/libapp.so cpp_src/app.cpp -Iinclude -std=c++20 -fPIC -lXi -lX11 -lGL -lXcursor
-
-# mac
-$ clang++ -shared -o lib/libapp.dylib cpp_src/app.mm -Iinclude -std=c++20 -lobjc -framework CoreFoundation -framework OpenGL -framework IOKit -framework Cocoa
-
 $ lein run
 ```
 
 ## Dev
 
 If needed for dev. Already included.
+
+### sokol-dll
+
+```bash
+# win
+$ clang -shared -o lib/libsokol.dll cpp_src/sokol_dll.c -Iinclude
+
+# linux
+$ clang -shared -o lib/libsokol.so cpp_src/sokol_dll.c -Iinclude -fPIC -lXi -lX11 -lGL -lXcursor
+
+# mac
+$ clang -shared -o lib/libsokol.dylib cpp_src/sokol_dll.m -Iinclude -lobjc -framework CoreFoundation -framework Metal -framework IOKit -framework Cocoa -framework QuartzCore
+```
 
 ### Compile shaders
 
